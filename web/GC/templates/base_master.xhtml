@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>        
+        <title><ui:insert name="title">Default title</ui:insert></title>
+        <link href="GC/assets/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+        <link href="GC/assets/css/bootstrap-responsive.min.css" type="text/css" rel="stylesheet"/>
+        <link href="GC/assets/css/font-awesome.css" type="text/css" rel="stylesheet"/>
+        <link href="GC/assets/css/base-admin.css" type="text/css" rel="stylesheet"/>
+        <link href="GC/assets/css/base-admin-responsive.css" type="text/css" rel="stylesheet"/>
+        <link href="GC/assets/css/pages/dashboard.css" type="text/css" rel="stylesheet"/>
+        <link href="GC/assets/css/bootstrap-toggle-buttons.css" type="text/css" rel="stylesheet"/>
+        <link href="GC/assets/js/lib/ui/css/jquery-ui-1.10.0.custom.css" type="text/css" rel="stylesheet"/>                           
+    </h:head>
+    <h:body>
+        
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container"><a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span
+                            class="icon-bar"></span> <span class="icon-bar"></span> </a> 
+                    <a class="brand" href="" target="_blank"> Gestions Commandes </a>
+                    <div class="nav-collapse">
+                        <ul class="nav pull-right">                           
+                            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> <i class="icon-cog"></i> Options <b
+                                        class="caret"></b> </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="">Routage</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="javascript:;">Aide</a></li>
+                                </ul>
+                            </li> 
+                          
+                                <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> <i class="icon-user"></i> 
+                                      #{sessionScope.username} <b class="caret"></b> </a>
+                                    <ul class="dropdown-menu">
+    <!--                                    <li><a href=""></a></li>-->
+                                        <li class="divider"></li>
+                                        <li><h:form><h:commandLink action="#{userBean.logout()}" value="Se déconnecter"></h:commandLink> </h:form></li>
+                                    </ul>
+                                </li>
+                           
+                        </ul>                     
+                        <form class="navbar-search pull-right" id="form-search" action="#"
+                              name="form-search"><input type="hidden" id="controller" value="" /> <input type="hidden" id="param" value="" /> <input type="text" class="search-query" placeholder="Search" name="s" id="s" />
+                            <button>OK</button>
+                        </form>
+                        <div class="modal hide fade" id="search-dialog" style="width: 80%;left: 10%;top: 10%;z-index: 1050;overflow: auto;margin:0">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">times;</button>
+                                <h3><span id="title_search" style="font-size: 20px;"></span></h3>
+                            </div>
+                            <div class="modal-body">
+                                <div class="widget-header"><i class="icon-th-list"></i>
+                                    <h3 id="title_table_search"></h3>
+                                </div>
+                                <table class="table table-striped table-bordered" id="table-search">
+                                    <thead>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>	
+                                </table>
+                            </div>
+                            <div class="modal-footer"><a href="#" class="btn" data-dismiss="modal" aria-hidden="true">Fermer</a></div>
+                        </div>
+                    </div>
+                    <!--/.nav-collapse --></div>
+                <!-- /container --></div> 
+        </div> 
+        <div id="header" class="subnavbar">
+            <div class="subnavbar-inner" id="header">
+                <div class="container">
+                    <ul class="mainnav">
+                        <li id="menu_home"> <a href="client.xhtml"> <i class="icon-home"></i> <span>Clients</span> </a> </li>
+                        <li id="menu_article"> <a href="produit.xhtml" ><i class="icon-list-alt"></i><span>Produits</span> </a>                           
+                        </li>
+                        <li id="menu_article"> <a href="commande.xhtml" ><i class="icon-tags"></i><span>Commandes</span> </a>                           
+                        </li> 
+                        <li  id="menu_user"> <a href="user.xhtml" ><i class="icon-user"></i><span>Utilisateurs</span></a>                           
+                        </li>
+                        <li class="dropdown" id="menu_sim"> 
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="icon-money"></i><span>Mouvements</span> <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="facture.xhtml">Facture</a></li>
+                                <li class="divider"></li>
+                                <li><a href="chiffresaffaire.xhtml">Chiffres d'affaire</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown" id="menu_sms"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-th-large"></i><span>Base de données</span> <b class="caret"></b></a>                      
+                         <ul class="dropdown-menu">                                
+                                <li class="divider"></li>
+                                <li><a href="backrestore.xhtml">Sauvegarder/Restaurer</a></li>
+                            </ul>
+                        </li>                                                                                     
+                    </ul>
+                </div> 
+            </div>  
+        </div>
+
+        <div id="content" ><ui:insert name="content">Default content</ui:insert></div>
+
+        <!--       
+                <div id="footer" > 
+                    <div class="footer" >
+                        <div class="footer-inner">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="span12"> copy;  <a href="/" target="_blank">http://www.sera2tantsaha.mg</a>. </div>
+                                     /span12  
+        
+                                </div>
+                                 /row  
+        
+                            </div>
+                             /container  
+        
+                        </div>
+                         /footer-inner  
+                    </div>
+                </div>-->
+       
+    </h:body>
+    <script
+    src="GC/assets/js/jquery-1.7.2.min.js"></script>
+    <script
+    src="GC/assets/js/jquery.toggle.buttons.js"></script>
+    <script
+    src="GC/assets/js/lib/jquery.tablesorter.min.js"></script>
+    <script
+    src="GC/assets/js/lib/localscroll/jquery.localscroll.js"></script>
+    <script
+    src="GC/assets/js/lib/localscroll/jquery.scrollTo.js"></script>
+    <script src="GC/assets/js/bootstrap.js"></script>
+    <script
+    src="GC/assets/js/lib/ui/js/jquery-ui-1.10.0.custom.min.js"></script>
+<!--    <script
+    src="GC/assets/js/lib/ui/js/jquery.ui.datepicker-fr.js"></script>
+    <script src="GC/assets/js/sites/init.js"></script>-->
+
+    <script src="GC/assets/js/base.js"></script>    
+</html>   

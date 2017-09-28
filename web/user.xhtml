@@ -1,0 +1,141 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+<ui:composition template="./GC/templates/base_master.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"      
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"      
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">
+        Gestions commandes / Utilisateur
+    </ui:define>
+
+    <ui:define name="content">
+        <h:body>
+            <div class="main-inner">
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                            <span class="span5 btn-toolbar btn-group" style="margin-left:  0">
+                                <h:form id="AjoutP">
+                                    <p:commandButton value="Nouveau" icon="ui-icon-adds"  update=":form_:editP_" oncomplete="clientAjout_.show()"/>
+                                </h:form>
+                            </span>
+
+                            <span class="span5 btn-toolbar pull-right" style="text-align: right;"></span>                       
+                            <div class="widget widget-table action-table">
+                                <div class="widget-header">
+                                    <i class="icon-th-list"> Listes des utilisateurs </i>                                    
+                                </div>                               
+                                <div class="widget-content" > 
+                                    <br/> 
+                                    <h:form id="formulaire">
+                                        <span class="table ">   
+                                            <p:growl id="growl" showDetail="true" sticky="false"  />
+                                            <p:dataTable var="users" value="#{userBean.userList}" id="AjoutTab" widgetVar="ClientTable"
+                                                         paginatorPosition="top" paginator="true"
+                                                         emptyMessage="Aucun résultat trouvé"                                                     
+                                                         paginatorTemplate="{RowsPerPageDropdown} {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
+                                                         rows="10" style="margin-bottom:20px"
+                                                         selectionMode="single" selection="#{userBean.userSelected}" rowKey="#{users.id}"> 
+                                                <p:ajax event="rowSelect" update="deleteButton,editButton" listener="#{userBean.onRowSelect}" />
+                                                <p:column >                                            
+                                                    <f:facet name="header" >
+                                                        <h:outputText value="ID" />
+                                                    </f:facet>
+                                                    <h:outputText value="#{users.id}"  />
+                                                </p:column>
+                                                <p:column>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="Login"/>
+                                                    </f:facet>
+                                                    <h:outputText value="#{users.login}" />
+                                                </p:column>                                           
+                                                <f:facet name="footer"> 
+                                                    <p:commandButton styleClass="btn btn-warning" id="editButton" value="Edit" title="Edit"  disabled="#{userBean.isDesactived()}"
+                                                                     update=":form:display_" oncomplete="clientAjout.show()"> 
+                                                    </p:commandButton>                                                                                                                                                                 
+                                                    <p:commandButton styleClass="btn btn-danger" id="deleteButton" value="Delete"  title="Delete" 
+                                                                     disabled="#{userBean.isDesactived()}"
+                                                                     oncomplete="confirmation.show();"/>                                                           
+                                                </f:facet>    
+                                            </p:dataTable>
+                                        </span>
+                                        <h3>Export Page Data </h3>
+                                        <h:commandLink>
+                                            <p:graphicImage value="GC/assets/img/excel.png" />
+                                            <p:dataExporter type="xls" target="AjoutTab" fileName="ListesClients_#{clientBean.dateTime()}" postProcessor="#{clientBean.postProcessXLS}" pageOnly="true"/>
+                                        </h:commandLink>
+                                        <h:commandLink>
+                                            <p:graphicImage value="GC/assets/img/pdf.png" />
+                                            <p:dataExporter type="pdf" target="AjoutTab" fileName="ListesClients_#{clientBean.dateTime()}"  pageOnly="true" />
+                                        </h:commandLink>
+                                        <h:commandLink>
+                                            <p:graphicImage value="GC/assets/img/csv.png" />
+                                            <p:dataExporter type="csv" target="AjoutTab" fileName="ListesClients_#{clientBean.dateTime()}" pageOnly="true" />
+                                        </h:commandLink>
+                                        <h:commandLink>
+                                            <p:graphicImage value="GC/assets/img/xml.png" />                                        
+                                            <p:dataExporter type="xml" target="AjoutTab" fileName="ListesClients_#{clientBean.dateTime()}" pageOnly="true" />
+                                        </h:commandLink>
+
+                                        <p:confirmDialog id="confirmDialog" 
+                                                         message="Avez-vous sure de supprimer cet enregistrement?"
+                                                         header="Dialogue de Confirmation" severity="alert"
+                                                         widgetVar="confirmation" style="width: 300px;">
+                                            <h:panelGrid id="display" columns="2" cellpadding="4"
+                                                         style="margin:0 auto;">                       
+                                                <p:commandButton id="confirm" value="Yes"
+                                                                 update=":formulaire:AjoutTab, :formulaire:growl" ajax="true"
+                                                                 oncomplete="confirmation.hide()" 
+                                                                 actionListener="#{userBean.suppression(userBean.userSelected.id)}" >                           
+                                                </p:commandButton>
+                                                <p:commandButton id="decline" value="No"
+                                                                 onclick="confirmation.hide()" type="button"/>
+                                            </h:panelGrid>                   
+                                        </p:confirmDialog>                                       
+                                    </h:form> 
+                                    <h:form id="form">
+                                        <p:dialog header="Formulaire de modification" widgetVar="clientAjout" resizable="false" id="editP" modal="true" >
+                                            <p:growl id="growl" showDetail="true" sticky="false" life="10000"/>
+                                            <h:panelGrid id="display_" columns="2" cellpadding="4" style="margin:0 auto;">
+                                                <h:outputLabel for="id" title="id" value="ID:"  />
+                                                <h:inputText value="#{userBean.userSelected.id}"  id="id" required="true" /> 
+                                                <h:outputLabel for="login" title="login" value="LOGIN:"  />
+                                                <h:inputText value="#{userBean.userSelected.login}"  id="login" required="true" /> 
+                                                <h:outputLabel for="password" title="password" value="PASSWORD:"  />
+                                                <h:inputSecret value="#{userBean.userSelected.password}" id="password" required="true"></h:inputSecret>
+                                            </h:panelGrid>
+                                            <p:separator/>
+                                            <p:commandButton value="Modifier" update=":formulaire:AjoutTab, growl"  oncomplete="clientAjout.hide()"
+                                                             actionListener="#{userBean.modification(actionEvent) }"/>
+                                        </p:dialog>
+                                    </h:form>
+                                    <h:form id="form_">
+                                        <p:dialog header="Formulaire de saisi" widgetVar="clientAjout_" resizable="false" id="editP_" modal="true" >
+                                            <p:growl id="growl" showDetail="true" sticky="false" life="10000"/>
+                                            <h:panelGrid id="display_" columns="2" cellpadding="4" style="margin:0 auto;">                                                
+                                                <h:outputLabel for="login" title="login" value="LOGIN:"  />
+                                                <h:inputText value="#{userBean.userSelected.login}" id="login" required="true"></h:inputText>
+                                                <h:outputLabel for="password" title="password" value="PASSWORD:"  />
+                                                <h:inputSecret value="#{userBean.userSelected.password}" id="password" required="true"></h:inputSecret>
+                                            </h:panelGrid>
+                                            <p:separator/>
+                                            <p:commandButton value="Enregistrer" update=":formulaire:AjoutTab, growl"  oncomplete="clientAjout_.hide()"
+                                                             actionListener="#{userBean.ajout(actionEvent) }"/>
+                                        </p:dialog>
+                                    </h:form>
+                                </div>
+                            </div>                                                
+                        </div>                                               
+                    </div>                
+                </div>            
+            </div>           
+        </h:body>        
+    </ui:define>
+</ui:composition>  
+

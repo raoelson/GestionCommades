@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+<ui:composition template="./GC/templates/base_master.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"      
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"      
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">
+        Gestions commandes / Facture
+    </ui:define>
+    <ui:define name="content">
+        <h:body>
+            <div class="main-inner">
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                            <span class="span5 btn-toolbar btn-group" style="margin-left:  0">                            
+                            </span>
+
+                            <span class="span5 btn-toolbar pull-right" style="text-align: right;"></span>                       
+                            <div class="widget widget-table action-table">
+                                <div class="widget-header">
+                                    <i class="icon-th-list"> Facture </i>                                    
+                                </div>                               
+                                <div class="widget-content" >
+                                    <h:form id="essai">
+                                        <p:panelGrid columns="3" style="margin-top: 10px; margin-left:auto; margin-right:auto;">
+                                            <p:outputLabel value="Numero client :" for="numero_client"/>
+                                            <h:selectOneMenu id="numero_client"  value="#{factureBean.commandeSelected.client.numclient}" 
+                                                             required="true"  >                                                
+                                                <f:selectItem itemLabel="Choisir" itemValue="" noSelectionOption="true" />
+                                                <f:selectItems var="clients" value="#{clientBean.listclient}" itemLabel="#{clients.numclient}" itemValue="#{clients.numclient}"/>                                                                                                                                         
+                                            </h:selectOneMenu>  
+                                            <p:commandButton  value="Recherche"
+                                                              update=":essai:a:AjoutTab,:essai:a:enlettre,:essai:a:enchiffre,:essai:form_nom" ajax="true"                                                                 
+                                                              actionListener="#{factureBean.affichage()}"></p:commandButton>
+                                            <h:outputLabel for="nom_"  value="Nom client"/>  
+                                            <h:outputLabel for="nom"  value="#{factureBean.commandeSelected.client.nomclient}" id="form_nom"/>                                                                                      
+                                        </p:panelGrid><br/>
+
+                                        <h:form id="a">                                     
+                                            <p:growl id="growl" showDetail="true" sticky="false"  />
+                                            <p:dataTable var="cm" value="#{factureBean.listCm}" id="AjoutTab" widgetVar="PersonneTable"
+                                                         emptyMessage="client non trouvé" >
+
+                                                <p:column id="design_" headerText="DESIGNATION"  >
+                                                    <h:outputText value="#{cm.produit.designproduit}" />
+                                                </p:column>
+                                                <p:column headerText="PU" id="pu_"  >
+                                                    <h:outputText value="#{cm.produit.puproduit}" />
+                                                </p:column>
+                                                <p:column headerText="QUANTITE" id="qte_"  >
+                                                    <h:outputText value="#{cm.qtecommande}" />
+                                                </p:column>
+                                                <p:column headerText="MONTANT" id="montat" >
+                                                    <h:outputText value="#{cm.produit.puproduit * cm.qtecommande}" />
+                                                </p:column>                                                 
+                                            </p:dataTable>
+                                            <p:panelGrid id="grille" columns="2" style=" margin-left:719px;width: 442px;">
+                                                <h:outputLabel for="chiffre" value=" TOTAL"  />    
+                                                <h:outputLabel for="titre_chiffre" id="enchiffre" value="#{factureBean.total_chiffre} Ariary"  />    
+                                            </p:panelGrid>  
+                                            <center><h:outputLabel for="titre" id="enlettre" value="ARRETEE LA PRESENTE FACTURE A LA SOMME DE #{factureBean.total}"  style="margin-top: 10px;"/></center>                                           
+                                        </h:form>
+                                    </h:form>
+                                </div>
+                            </div>                                                
+                        </div>                                               
+                    </div>                
+                </div>            
+            </div>           
+        </h:body>      
+    </ui:define>
+</ui:composition> 

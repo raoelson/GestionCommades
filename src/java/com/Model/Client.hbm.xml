@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 19 oct. 2015 12:59:10 by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+  <class catalog="gestioncommande" name="com.Model.Client" table="client">
+    <id name="numclient" type="string">
+      <column length="32" name="numclient"/>
+      <generator class="assigned"/>
+    </id>
+    <property name="nomclient" type="string">
+      <column length="32" name="nomclient" not-null="true"/>
+    </property>
+    <set fetch="select" inverse="true" lazy="true" name="commandes" table="commande">
+      <key>
+        <column length="32" name="numclient" not-null="true"/>
+      </key>
+      <one-to-many class="com.Model.Commande"/>
+    </set>
+  </class>
+</hibernate-mapping>

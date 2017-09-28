@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+<ui:composition template="./GC/templates/base_master.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"      
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"      
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">
+        Gestions commandes / Produit
+    </ui:define>
+
+    <ui:define name="content">
+        <h:body>
+            <div class="main-inner">
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                            <span class="span5 btn-toolbar btn-group" style="margin-left:  0">
+                                <h:form id="AjoutP">
+                                                                        <p:commandButton value="Nouveau" icon="ui-icon-adds"  update=":form_:editP_" oncomplete="prodAjout_.show()"/>
+                                </h:form>
+                            </span>
+
+                            <span class="span5 btn-toolbar pull-right" style="text-align: right;"></span>                       
+                            <div class="widget widget-table action-table">
+                                <div class="widget-header">
+                                    <i class="icon-th-list"> Listes des Produits </i>                                    
+                                </div>                               
+                                <div class="widget-content" > 
+                                    <br/> 
+                                    <h:form id="formulaire">
+                                        <span class="table ">   
+                                            <p:growl id="growl" showDetail="true" sticky="false"  />
+                                            <p:dataTable var="prods" value="#{produitBean.listProd}" id="AjoutTab" widgetVar="ProduitTable"
+                                                         paginatorPosition="top" paginator="true"
+                                                         emptyMessage="Aucun résultat trouvé"                                                     
+                                                         paginatorTemplate="{RowsPerPageDropdown} {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
+                                                         rows="10" style="margin-bottom:20px"
+                                                         selectionMode="single" selection="#{produitBean.produitSelected}" rowKey="#{prods.numproduit}"> 
+                                                <p:ajax event="rowSelect" update="deleteButton,editButton" listener="#{produitBean.onRowSelect}" />
+                                                <p:column >                                            
+                                                    <f:facet name="header" >
+                                                        <h:outputText value="Numero" />
+                                                    </f:facet>
+                                                    <h:outputText value="#{prods.numproduit}"  />
+                                                </p:column>
+                                                <p:column>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="Désignation"/>
+                                                    </f:facet>
+                                                    <h:outputText value="#{prods.designproduit}" />
+                                                </p:column> 
+                                                <p:column>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="Prix unitaire"/>
+                                                    </f:facet>
+                                                    <h:outputText value="#{prods.puproduit}" />
+                                                </p:column>
+                                                <f:facet name="footer"> 
+                                                    <p:commandButton styleClass="btn btn-warning" id="editButton" value="Edit" title="Edit"  disabled="#{produitBean.desactived}"
+                                                                    update=":form:display_" oncomplete="prodAjout.show()" > 
+                                                    </p:commandButton>                                                                                                                                                                 
+                                                    <p:commandButton styleClass="btn btn-danger" id="deleteButton" value="Delete"  title="Delete" 
+                                                                     disabled="#{produitBean.desactived}"
+                                                                     oncomplete="confirmation.show();"/>                                                           
+                                                </f:facet> 
+                                            </p:dataTable>
+                                        </span>  
+                                        <h3>Export Page Data </h3>
+                                        <h:commandLink>
+                                            <p:graphicImage value="GC/assets/img/excel.png" />
+                                            <p:dataExporter type="xls" target="AjoutTab" fileName="ListesProd_#{clientBean.dateTime()}" pageOnly="true"/>
+                                        </h:commandLink>
+                                        <h:commandLink>
+                                            <p:graphicImage value="GC/assets/img/pdf.png" />
+                                            <p:dataExporter type="pdf" target="AjoutTab" fileName="ListesProd_#{clientBean.dateTime()}" pageOnly="true" />
+                                        </h:commandLink>
+                                        <h:commandLink>
+                                            <p:graphicImage value="GC/assets/img/csv.png" />
+                                            <p:dataExporter type="csv" target="AjoutTab" fileName="ListesProd_#{clientBean.dateTime()}" pageOnly="true" />
+                                        </h:commandLink>
+                                        <h:commandLink>
+                                            <p:graphicImage value="GC/assets/img/xml.png" />                                        
+                                            <p:dataExporter type="xml" target="AjoutTab" fileName="ListesProd_#{clientBean.dateTime()}" pageOnly="true" />
+                                        </h:commandLink>
+                                        <p:confirmDialog id="confirmDialog" 
+                                                         message="Avez-vous sure de supprimer cet enregistrement?"
+                                                         header="Dialogue de Confirmation" severity="alert"
+                                                         widgetVar="confirmation" style="width: 300px;">
+                                            <h:panelGrid id="display" columns="2" cellpadding="4"
+                                                         style="margin:0 auto;">                       
+                                                <p:commandButton id="confirm" value="Yes"
+                                                                 update=":formulaire:AjoutTab, :formulaire:growl" ajax="true"
+                                                                 oncomplete="confirmation.hide()" 
+                                                                 actionListener="#{produitBean.suppression(produitBean.produitSelected.numproduit)}" >                           
+                                                </p:commandButton>
+                                                <p:commandButton id="decline" value="No"
+                                                                 onclick="confirmation.hide()" type="button"/>
+                                            </h:panelGrid>                   
+                                        </p:confirmDialog>   
+                                    </h:form>
+                                    <h:form id="form">
+                                        <p:dialog header="Formulaire de saisi" widgetVar="prodAjout" resizable="false" id="editP" modal="true" >
+                                            <p:growl id="growl" showDetail="true" sticky="false" life="10000"/>
+                                            <h:panelGrid id="display_" columns="2" cellpadding="4" style="margin:0 auto;">
+                                                <h:outputLabel for="numerop" title="Numero" value="Numero:"  />
+                                                <h:inputText value="#{produitBean.produitSelected.numproduit}"  id="numerop" required="true" />
+                                                <h:outputLabel for="design"  value="Désignation:" />
+                                                <h:inputText value="#{produitBean.produitSelected.designproduit}"  id="design" required="true"/>
+                                                <h:outputLabel for="pu"  value="Prix unitaire:" />
+                                                <h:inputText value="#{produitBean.produitSelected.puproduit}"  id="pu" required="true"/>
+                                            </h:panelGrid>
+                                            <p:separator/>
+                                            <p:commandButton value="Modifier" update=":formulaire:AjoutTab, growl"  oncomplete="prodAjout.hide()"
+                                                             actionListener="#{produitBean.modification(actionEvent) }"/>
+                                        </p:dialog>
+                                    </h:form>
+                                    <h:form id="form_">
+                                        <p:dialog header="Formulaire de saisi" widgetVar="prodAjout_" resizable="false" id="editP_" modal="true" >
+                                            <p:growl id="growl" showDetail="true" sticky="false" life="10000"/>
+                                            <h:panelGrid id="display_" columns="2" cellpadding="4" style="margin:0 auto;">
+                                                <h:outputLabel for="numerop" title="Numero" value="Numero:"  />
+                                                <h:inputText value="#{produitBean.produitSelected.numproduit}"  id="numerop" required="true" />
+                                                <h:outputLabel for="design"  value="Désignation:" />
+                                                <h:inputText value="#{produitBean.produitSelected.designproduit}"  id="design" required="true"/>
+                                                <h:outputLabel for="pu"  value="Prix unitaire:" />
+                                                <h:inputText value="#{produitBean.produitSelected.puproduit}"  id="pu" required="true"/>
+                                            </h:panelGrid>
+                                            <p:separator/>
+                                            <p:commandButton value="Enregistrer" update=":formulaire:AjoutTab, growl"  oncomplete="prodAjout_.hide()"
+                                                             actionListener="#{produitBean.ajout(actionEvent) }"/>
+                                        </p:dialog>
+                                    </h:form>
+                                </div>
+                            </div>                                                
+                        </div>                                               
+                    </div>                
+                </div>            
+            </div>           
+        </h:body>        
+    </ui:define>
+</ui:composition>  
+

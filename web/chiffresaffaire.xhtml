@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+<ui:composition template="./GC/templates/base_master.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"      
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"      
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">
+        Gestions commandes / Facture
+    </ui:define>
+    <ui:define name="content">
+        <h:body>
+            <div class="main-inner">
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                            <span class="span5 btn-toolbar btn-group" style="margin-left:  0">                            
+                            </span>
+
+                            <span class="span5 btn-toolbar pull-right" style="text-align: right;"></span>                       
+                            <div class="widget widget-table action-table">
+                                <div class="widget-header">
+                                    <i class="icon-th-list"> Chiffres d'affaire </i>                                    
+                                </div>                               
+                                <div class="widget-content" >
+
+                                    <h:form id="a">                                                                              
+                                        <p:tabView dynamic="true" effect="fade" effectDuration="fast" id="tab">
+                                            <p:tab title="CLIENT"> 
+                                                <p:panelGrid id="panel" columns="3" style="margin-left: auto;margin-right: auto;margin-top: 10px;">
+                                                    <h:outputText  value="Recherche par Année :"/>
+                                                    <h:selectOneMenu id="annee"  value="#{factureBean.commandeSelected.annee}" 
+                                                                     required="true" >                                                    
+                                                        <f:selectItem itemLabel="Choisir" itemValue="" noSelectionOption="true" />
+                                                        <f:selectItems var="annee" value="#{factureBean.comboAnnee()}" itemLabel="#{annee.annee}" itemValue="#{annee.annee}"/>
+                                                    </h:selectOneMenu>
+                                                    <p:commandButton value="ok" action="#{factureBean.chiffreTable()}" update=":a:tab:AjoutTab" ></p:commandButton>
+                                                </p:panelGrid> 
+                                                <p:dataTable var="cm" value="#{factureBean.chiffreTable()}" id="AjoutTab" widgetVar="PersonneTable"
+                                                             emptyMessage="client non trouvé" style="margin-top: 10px;">
+                                                    <p:column id="num" headerText="N° CLIENT"  >
+                                                        <h:outputText value="#{cm.client.numclient}" />
+                                                    </p:column>
+                                                    <p:column headerText="NOM CLIENT" id="nom"  >
+                                                        <h:outputText value="#{cm.client.nomclient}" />
+                                                    </p:column>
+                                                    <p:column headerText="CHIFFRE D'AFFAIRE" id="ch"  >
+                                                        <h:outputText value="#{cm.qtecommande}" />
+                                                    </p:column>                                                     
+                                                </p:dataTable>                                              
+                                            </p:tab>
+                                            <p:tab title="Graphe">
+                                                <p:panel >                                                 
+                                                    <p:graphicImage value="#{factureBean.chart}" id="image"/> 
+                                                </p:panel>
+                                            </p:tab>                                       
+                                        </p:tabView>
+                                    </h:form>
+                                </div>
+                            </div>                                                
+                        </div>                                               
+                    </div>                
+                </div>            
+            </div>           
+        </h:body>
+
+    </ui:define>
+</ui:composition> 
+

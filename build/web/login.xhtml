@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"      
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"      
+    xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <meta charset="utf-8" />
+        <title>Login - Gestion des Commandes</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+        <meta name="apple-mobile-web-app-capable" content="yes"/> 
+        <link href="GC/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="GC/assets/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
+        <link href="GC/assets/css/pages/signin.css" rel="stylesheet" type="text/css" />                        
+    </h:head>
+    <h:body>
+        <h:form id="form">
+             <!-- /navbar -->
+            <div class="account-container">
+                <div class="content clearfix">
+
+                    <p:growl id="growl" showDetail="true" sticky="false"  />
+                    <h1 style="color: #000">Authentification</h1>		
+                    <div class="login-fields">
+                        <p>Identifiez-vous avec votre compte:</p>
+                        <div class="field">
+                            <label for="username">Login:</label>
+                            <h:inputText  id="login"  value="#{userBean.login_}"  class="login username-field" required="true"/>
+                        </div> <!-- /field -->
+                        <div class="field">
+                            <label for="password">Mot de passe :</label>
+                            <h:inputSecret id="password"  value="#{userBean.password_}"  class="login password-field" required="true"/>
+                        </div> <!-- /password -->                              
+                    </div> <!-- /login-fields -->
+
+                    <div class="login-actions">
+                        <p:separator/>
+                        <p:commandButton value="Se connecter" update=":form:growl" action="#{userBean.validateUsernamePassword()}"></p:commandButton>                                 
+                    </div> <!-- .actions -->
+
+                </div> <!-- /content -->
+            </div> <!-- /account-container -->
+            <!-- Text Under Box -->                
+            <script src="GC/assets/js/jquery-1.7.2.min.js"></script>
+            <script src="GC/assets/js/bootstrap.js"></script>    
+        </h:form>
+    </h:body>                            
+</html>

@@ -1,0 +1,88 @@
+#rep{
+	margin-bottom: 10px;
+	font-family: Arial, Helvetica, sans-serif; color: #666;
+	line-height: 28px;
+	min-width: 130px;
+	padding: 0 0 10px 0;
+	text-align: left;
+	font-size: 14px;
+	font-weight:bold;
+}
+#plupload{ 
+	font-family: Arial, Helvetica, sans-serif; color: #AAA;
+}
+#droparea{
+	border: 4px dashed #DDD;
+	text-align: center;
+	font-size: 13px;
+	height: 200px;
+}
+#droparea.hover{
+	border-color:#83b4d8;
+}
+
+#droparea p{
+	margin: 0;
+	padding: 60px 0 0 0;
+	font-weight: bold;
+	font-size: 20px;
+}
+#droparea span{
+	display: block;
+	margin-bottom: 6px;
+}
+#browse{
+	border: 1px solid #BBB;
+	padding: 3px 8px;
+	text-decoration: none;
+	color:#464646;
+	border-radius: 15px
+}
+#end{
+	border: 1px solid #BBB;
+	padding: 3px 8px;
+	text-decoration: none;
+	color: #C30;
+	border-radius: 15px
+}
+#filelist{
+	margin-top: 10px;
+}
+#filelist .file{
+	padding: 0 10px;
+	border: 1px solid #DFDFDF;
+	height: 70px;
+	line-height: 70px;
+	margin-bottom: 10px;
+	position: relative;
+}
+#filelist .file img{
+	height: 55px;
+	margin-top: 5px;
+	margin-right: 10px;
+	vertical-align: middle;
+}
+#filelist .file .actions{
+	position: absolute;
+	top: 0px;
+	right: 5px;
+}
+.del{
+	color: #C00;
+}
+
+#filelist .progressbar{
+	background-color: #abb2bc;
+	position: absolute;
+	top: 25px;
+	right: 5px;
+	width: 150px; height: 20px;
+	border-radius: 25px;
+}
+#filelist .progressbar .progress{
+	position: absolute;
+	border: 1px solid #093;
+	height: 18px; width: 10%;
+	background: url(bg.jpg) repeat; 
+	border-radius: 25px;
+}

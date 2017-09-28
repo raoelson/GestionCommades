@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+<ui:composition template="./GC/templates/base_master.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"      
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"      
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">
+        Gestions commandes / Backup and Restore database
+    </ui:define>
+    <ui:define name="content">
+        <h:body>
+            <div class="main-inner">
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                            <span class="span5 btn-toolbar btn-group" style="margin-left:  0">                            
+                            </span>
+
+                            <span class="span5 btn-toolbar pull-right" style="text-align: right;"></span>                       
+                            <div class="widget widget-table action-table">
+                                <div class="widget-header">
+                                    <i class="icon-th-list"> Backup and Restore database </i>                                    
+                                </div>                               
+                                <div class="widget-content" >
+                                    <h:form id="a" enctype="multipart/form-data">                                            
+                                        <p:growl id="growl" showDetail="true" sticky="false" life="10000"/>
+                                        <p:tabView dynamic="true" effect="fade" effectDuration="fast">
+
+                                            <p:tab title="Backup">                                                    
+                                                <p:panelGrid columns="3" id="back_rest" style="margin-left: auto;margin-right: auto;">
+                                                    <h:outputLabel for="nom" title="Nom" value="Nom de la base :"  />
+                                                    <h:inputText value="#{userBean.nom_base}"  id="nom" required="true" readonly="true"/> 
+                                                    <p:commandButton value="Enregistrer" update=":a:growl" actionListener="#{userBean.back()}" />
+                                                </p:panelGrid>                                                   
+
+                                            </p:tab>
+                                            <p:tab title="Restore">
+                                                <h:panelGrid columns="2" cellpadding="10" style="margin-left: auto;margin-right: auto;">
+                                                    <p:panelGrid columns="3" id="rest_back_" style="margin-left: auto;margin-right: auto;">
+                                                       
+                                                    </p:panelGrid>  
+                                                </h:panelGrid>
+                                            </p:tab>                                       
+                                        </p:tabView>                                        
+                                    </h:form>
+                                </div>
+                            </div>                                                
+                        </div>                                               
+                    </div>                
+                </div>            
+            </div>           
+        </h:body>
+
+    </ui:define>
+</ui:composition> 
+

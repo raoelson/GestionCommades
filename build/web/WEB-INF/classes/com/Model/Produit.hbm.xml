@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 19 oct. 2015 12:59:10 by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+  <class catalog="gestioncommande" name="com.Model.Produit" table="produit">
+    <id name="numproduit" type="string">
+      <column length="32" name="numproduit"/>
+      <generator class="assigned"/>
+    </id>
+    <property name="designproduit" type="string">
+      <column length="32" name="designproduit" not-null="true"/>
+    </property>
+    <property name="puproduit" type="big_decimal">
+      <column name="puproduit" not-null="true" precision="10"/>
+    </property>
+    <set fetch="select" inverse="true" lazy="true" name="commandes" table="commande">
+      <key>
+        <column length="32" name="numproduit" not-null="true"/>
+      </key>
+      <one-to-many class="com.Model.Commande"/>
+    </set>
+  </class>
+</hibernate-mapping>

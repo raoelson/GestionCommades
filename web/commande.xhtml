@@ -1,0 +1,229 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+<ui:composition template="./GC/templates/base_master.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"      
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"      
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">
+        Gestions commandes / Commandes
+    </ui:define>
+
+    <ui:define name="content">
+        <h:body>
+            <div class="main-inner">
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                            <span class="span5 btn-toolbar btn-group" style="margin-left:  0">
+                                <h:form id="AjoutP">
+                                    <p:commandButton value="Nouveau" icon="ui-icon-adds"  update=":form_:editP_" oncomplete="commandeAjout_.show()"/>
+                                </h:form>
+                            </span>
+
+                            <span class="span5 btn-toolbar pull-right" style="text-align: right;"></span>                       
+                            <div class="widget widget-table action-table">
+                                <div class="widget-header">
+                                    <i class="icon-th-list"> Listes des Commandes </i>                                    
+                                </div>                               
+                                <div class="widget-content" >                                     
+                                    <h:form id="form_search" style="margin-top: 10px;">
+                                        <p:growl id="growl_" showDetail="true" sticky="false"  />
+                                        <p:panelGrid id="display_" columns="6"  style="margin:0 auto;">
+                                            <h:outputLabel for="date_debut"  value="Date début:" />
+                                            <p:calendar effect="explode"  id="date_debut" size="15" value="#{commandeBean.commandeSelected.debut}" pattern="yyyy-MM-dd" required="true" />  
+                                            <h:outputLabel for="date_fin"  value="Date fin:" />
+                                            <p:calendar effect="explode"  id="date_fin" size="15" value="#{commandeBean.commandeSelected.fin}" pattern="yyyy-MM-dd" required="true" />  
+                                            <p:commandButton  id="searchButton" value="Recherche" title="Recherche"  
+                                                              update=":form_search:SearchTable_,:formulaire:growl" actionListener="#{commandeBean.search2date()}"
+                                                              oncomplete="commandeSearch.show()" />                                            
+                                        </p:panelGrid>
+                                        <p:dialog header="Résultats de recherche" widgetVar="commandeSearch"
+                                                  showEffect="explode"  resizable="true" id="Search" modal="true" width="700" >                                            
+                                            <p:dataTable var="cmsearch" value="#{commandeBean.search2date()}" id="SearchTable_" widgetVar="SearchTable"
+                                                         paginatorPosition="top" paginator="true"
+                                                         emptyMessage="Aucun résultat trouvé"                                                     
+                                                         paginatorTemplate="{RowsPerPageDropdown} {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
+                                                         rows="10" style="margin-bottom:20px"
+                                                         >
+                                                <p:column >                                            
+                                                    <f:facet name="header" >
+                                                        <h:outputText value="Nom client" />
+                                                    </f:facet>
+                                                    <h:outputText value="#{cmsearch.client.nomclient}"  />
+                                                </p:column>
+                                                <p:column>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="Désignation produit"/>
+                                                    </f:facet>
+                                                    <h:outputText value="#{cmsearch.produit.designproduit}" />
+                                                </p:column> 
+                                                <p:column>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="Qté"/>
+                                                    </f:facet>
+                                                    <h:outputText value="#{cmsearch.qtecommande}" />
+                                                </p:column>
+                                                <p:column>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="Date"/>
+                                                    </f:facet>
+                                                    <h:outputText value="#{cmsearch.datecommande}" />
+                                                </p:column>
+                                            </p:dataTable>                                                
+                                        </p:dialog>
+                                    </h:form>
+                                    <h:form id="formulaire">     
+                                        
+                                        <span class="table ">   
+                                            <p:growl id="growl" showDetail="true" sticky="false"  />
+                                            <p:dataTable var="commandes" value="#{commandeBean.listCm}" id="AjoutTab" widgetVar="CommandeTable"
+                                                         paginatorPosition="top" paginator="true"
+                                                         emptyMessage="Aucun résultat trouvé"                                                     
+                                                         paginatorTemplate="{RowsPerPageDropdown} {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} "
+                                                         rows="10" style="margin-bottom:20px"
+                                                         selectionMode="single" selection="#{commandeBean.commandeSelected}" rowKey="#{commandes.id}"> 
+                                                <p:ajax event="rowSelect" update="deleteButton,editButton" listener="#{commandeBean.onRowSelect}" />
+                                                <p:column >                                            
+                                                    <f:facet name="header" >
+                                                        <h:outputText value="Nom client" />
+                                                    </f:facet>
+                                                    <h:outputText value="#{commandes.client.nomclient}"  />
+                                                </p:column>
+                                                <p:column>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="Désignation produit"/>
+                                                    </f:facet>
+                                                    <h:outputText value="#{commandes.produit.designproduit}" />
+                                                </p:column> 
+                                                <p:column>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="Qté"/>
+                                                    </f:facet>
+                                                    <h:outputText value="#{commandes.qtecommande}" />
+                                                </p:column>
+                                                <p:column>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="Date"/>
+                                                    </f:facet>
+                                                    <h:outputText value="#{commandes.datecommande}" />
+                                                </p:column>
+                                                <f:facet name="footer"> 
+                                                    <p:commandButton styleClass="btn btn-warning" id="editButton" value="Edit" title="Edit"  disabled="#{commandeBean.desactived}"
+                                                                     update=":form:display_" oncomplete="commandeAjout.show()" > 
+                                                    </p:commandButton>                                                                                                                                                                 
+                                                    <p:commandButton styleClass="btn btn-danger" id="deleteButton" value="Delete"  title="Delete" 
+                                                                     disabled="#{commandeBean.desactived}"
+                                                                     oncomplete="confirmation.show();"/>                                                           
+                                                </f:facet>
+                                            </p:dataTable>
+                                        </span>  
+                                        <h3>Export Page Data </h3>
+                                        <h:commandLink>
+                                            <p:graphicImage value="GC/assets/img/excel.png" />
+                                            <p:dataExporter type="xls" target="AjoutTab" fileName="ListesProd_#{clientBean.dateTime()}" pageOnly="true"/>
+                                        </h:commandLink>
+                                        <h:commandLink>
+                                            <p:graphicImage value="GC/assets/img/pdf.png" />
+                                            <p:dataExporter type="pdf" target="AjoutTab" fileName="ListesCommandes_#{clientBean.dateTime()}" pageOnly="true" />
+                                        </h:commandLink>
+                                        <h:commandLink>
+                                            <p:graphicImage value="GC/assets/img/csv.png" />
+                                            <p:dataExporter type="csv" target="AjoutTab" fileName="ListesCommandes_#{clientBean.dateTime()}" pageOnly="true" />
+                                        </h:commandLink>
+                                        <h:commandLink>
+                                            <p:graphicImage value="GC/assets/img/xml.png" />                                        
+                                            <p:dataExporter type="xml" target="AjoutTab" fileName="ListesCommandes_#{clientBean.dateTime()}" pageOnly="true" />
+                                        </h:commandLink>
+                                        <p:confirmDialog id="confirmDialog" 
+                                                         message="Avez-vous sure de supprimer cet enregistrement?"
+                                                         header="Dialogue de Confirmation" severity="alert"
+                                                         widgetVar="confirmation" style="width: 300px;">
+                                            <h:panelGrid id="display" columns="2" cellpadding="4"
+                                                         style="margin:0 auto;">                       
+                                                <p:commandButton id="confirm" value="Yes"
+                                                                 update=":formulaire:AjoutTab, :formulaire:growl" ajax="true"
+                                                                 oncomplete="confirmation.hide()" 
+                                                                 actionListener="#{commandeBean.suppression(commandeBean.commandeSelected.id)}" >                           
+                                                </p:commandButton>
+                                                <p:commandButton id="decline" value="No"
+                                                                 onclick="confirmation.hide()" type="button"/>
+                                            </h:panelGrid>                   
+                                        </p:confirmDialog> 
+                                    </h:form>
+                                    <h:form id="form">
+                                        <p:dialog header="Formulaire de modification" widgetVar="commandeAjout"
+                                                  showEffect="explode"  resizable="false" id="editP" modal="true"
+                                                  >
+                                            <p:growl id="growl" showDetail="true" sticky="false" life="10000"/>
+                                            <h:panelGrid id="display_" columns="2" cellpadding="4" style="margin:0 auto;">
+                                                <h:outputLabel for="id"  value="ID :" style="display: none;"/>
+                                                <h:inputText value="#{commandeBean.commandeSelected.id}"  id="id" required="true" style="display: none;"/>
+                                                <p:outputLabel value="Client :" for="numero_client" />
+                                                <h:selectOneMenu id="numero_client"  value="#{commandeBean.commandeSelected.client.numclient}" 
+                                                                 required="true" >                                                    
+                                                    <f:selectItem itemLabel="Choisir" itemValue="" noSelectionOption="true" />
+                                                    <f:selectItems var="clients" value="#{clientBean.listclient}" itemLabel="#{clients.nomclient}" itemValue="#{clients.numclient}"/>
+                                                </h:selectOneMenu>
+                                                <p:outputLabel value="Produit :" for="numero_prod" />
+                                                <h:selectOneMenu id="numero_prod"  value="#{commandeBean.commandeSelected.produit.numproduit}" 
+                                                                 required="true" >                                                    
+                                                    <f:selectItem itemLabel="Choisir" itemValue="" noSelectionOption="true" />
+                                                    <f:selectItems var="prods" value="#{produitBean.listProd}" itemLabel="#{prods.designproduit}" itemValue="#{prods.numproduit}"/>
+                                                </h:selectOneMenu>
+                                                <h:outputLabel for="qte"  value="Qté :" />
+                                                <h:inputText value="#{commandeBean.commandeSelected.qtecommande}"  id="qte" required="true"/>
+                                                <h:outputLabel for="date_c"  value="Date Commande:" />
+                                                <p:calendar effect="explode" id="date_c" size="15" value="#{commandeBean.commandeSelected.datecommande}" pattern="yyyy-MM-dd" required="true"                                                           
+                                                            />                                              
+                                            </h:panelGrid>
+                                            <p:separator/>
+                                            <p:commandButton value="Modifier" update=":formulaire:AjoutTab, growl"  oncomplete="commandeAjout.hide()"
+                                                             actionListener="#{commandeBean.modification_()}"      />
+                                        </p:dialog>
+                                    </h:form>
+                                    <h:form id="form_">
+                                        <p:dialog header="Formulaire de saisie" widgetVar="commandeAjout_"
+                                                  showEffect="explode"  resizable="false" id="editP_" modal="true"
+                                                  >
+                                            <p:growl id="growl" showDetail="true" sticky="false" life="10000"/>
+                                            <h:panelGrid id="display_" columns="2" cellpadding="4" style="margin:0 auto;">
+                                                <p:outputLabel value="Numero Client :" for="numero_client" />
+                                                <h:selectOneMenu id="numero_client"  value="#{commandeBean.commandeSelected.client.numclient}" 
+                                                                 required="true" >                                                    
+                                                    <f:selectItem itemLabel="Choisir" itemValue="" noSelectionOption="true" />
+                                                    <f:selectItems var="clients" value="#{clientBean.listclient}" itemLabel="#{clients.nomclient}" itemValue="#{clients.numclient}"/>
+                                                </h:selectOneMenu>
+                                                <p:outputLabel value="Numero Produit :" for="numero_prod" />
+                                                <h:selectOneMenu id="numero_prod"  value="#{commandeBean.commandeSelected.produit.numproduit}" 
+                                                                 required="true" >                                                    
+                                                    <f:selectItem itemLabel="Choisir" itemValue="" noSelectionOption="true" />
+                                                    <f:selectItems var="prods" value="#{produitBean.listProd}" itemLabel="#{prods.designproduit}" itemValue="#{prods.numproduit}"/>
+                                                </h:selectOneMenu>
+                                                <h:outputLabel for="qte"  value="Qté :" />
+                                                <h:inputText value="#{commandeBean.commandeSelected.qtecommande}"  id="qte" required="true"/>
+                                                <h:outputLabel for="date_c"  value="Date Commande:" />
+                                                <p:calendar effect="explode"  id="date_c" size="15" value="#{commandeBean.commandeSelected.datecommande}" pattern="yyyy-MM-dd" required="true"                                                           
+                                                            />                                                
+                                            </h:panelGrid>
+                                            <p:separator/>
+                                            <p:commandButton value="Enregistrer" update=":formulaire:AjoutTab, growl"  oncomplete="commandeAjout_.hide()"
+                                                             actionListener="#{commandeBean.ajout(actionEvent)}"      />
+                                        </p:dialog>
+                                    </h:form>
+                                </div>
+                            </div>                                                
+                        </div>                                               
+                    </div>                
+                </div>            
+            </div>           
+        </h:body>  
+
+    </ui:define>
+</ui:composition>  
+
